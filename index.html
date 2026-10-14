@@ -956,17 +956,18 @@ body { margin: 0; background: var(--color-white); font-family: var(--font-base);
 <style>/* sections/dev-notes/dev-notes.css */
 /* ==========================================================================
    Section: dev-notes (project-only, prototype annotation — not part of the design)
-   Collapsible panel pinned to the right edge listing the CSS / copy changes
+   Collapsible panel: vertical tab centered on the right edge; panel opens to its left, centered listing the CSS / copy changes
    developers need for ACCOUNT-182. Built on <details>, so no JS.
    Mobile-first · design breakpoints only (768).
    ========================================================================== */
 .sh-devnotes {
-  position: fixed; z-index: 1100; right: 0; bottom: 16px;
+  position: fixed; z-index: 1100; right: 0; top: 50%; transform: translateY(-50%);
   font-family: var(--font-base); color: var(--color-gray-800);
 }
+/* Vertical tab on the right edge, centered on the screen */
 .sh-devnotes__toggle {
   list-style: none; cursor: pointer; display: flex; align-items: center; gap: 8px;
-  margin-left: auto; width: max-content; padding: 10px 16px;
+  padding: 16px 10px; writing-mode: vertical-rl; transform: rotate(180deg);
   background: var(--color-gray-800); color: var(--color-white);
   font-size: 12px; font-weight: 700; letter-spacing: .6px; text-transform: uppercase;
 }
@@ -975,10 +976,12 @@ body { margin: 0; background: var(--color-white); font-family: var(--font-base);
 .sh-devnotes[open] .sh-devnotes__toggle::after { content: "–"; }
 .sh-devnotes__toggle:focus-visible { outline: 2px solid var(--color-blue-focus); outline-offset: 2px; }
 
+/* Panel opens to the LEFT of the tab, also centered vertically */
 .sh-devnotes__panel {
-  width: 100vw; max-height: 70vh; overflow-y: auto; box-sizing: border-box;
-  padding: 20px 16px 24px; background: var(--color-white);
-  border-top: 1px solid var(--color-brown-200); box-shadow: 0 -4px 16px rgba(0,0,0,.12);
+  position: absolute; right: 100%; top: 50%; transform: translateY(-50%);
+  width: min(420px, calc(100vw - 48px)); max-height: calc(100vh - 48px); overflow-y: auto;
+  box-sizing: border-box; padding: 20px 16px 24px; background: var(--color-white);
+  border: 1px solid var(--color-brown-200); box-shadow: -4px 4px 16px rgba(0,0,0,.12);
   font-size: 13px; line-height: 20px;
 }
 .sh-devnotes__panel h2 { margin: 0 0 4px; font-size: 16px; font-weight: 700; }
@@ -1006,15 +1009,6 @@ body { margin: 0; background: var(--color-white); font-family: var(--font-base);
   background: var(--color-gray-50); border-left: 2px solid var(--color-gray-300);
 }
 .sh-devnotes__was { color: var(--color-gray-700); }
-
-@media (min-width: 768px) {
-  .sh-devnotes { top: 120px; bottom: auto; }
-  .sh-devnotes__panel {
-    width: 420px; max-height: calc(100vh - 160px);
-    border: 1px solid var(--color-brown-200); border-right: 0;
-    box-shadow: -4px 4px 16px rgba(0,0,0,.12);
-  }
-}
 
 </style>
 <style>/* sections/invoice-download/invoice-download.css */
