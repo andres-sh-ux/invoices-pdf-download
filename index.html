@@ -956,33 +956,59 @@ body { margin: 0; background: var(--color-white); font-family: var(--font-base);
 <style>/* sections/dev-notes/dev-notes.css */
 /* ==========================================================================
    Section: dev-notes (project-only, prototype annotation — not part of the design)
-   Collapsible panel: vertical tab centered on the right edge; panel opens to its left, centered listing the CSS / copy changes
+   Collapsible panel: vertical tab 16px from the right edge, centered; when open, the panel takes its place (16px from the right) and the tab slides out to its left listing the CSS / copy changes
    developers need for ACCOUNT-182. Built on <details>, so no JS.
    Mobile-first · design breakpoints only (768).
    ========================================================================== */
 .sh-devnotes {
-  position: fixed; z-index: 1100; right: 0; top: 50%; transform: translateY(-50%);
+  --devnotes-blue: #003087;
+  --devnotes-gap: 8px;
+  --devnotes-panel-w: min(420px, calc(100vw - 96px));
+  position: fixed; z-index: 1100; right: 16px; top: 50%; transform: translateY(-50%);
   font-family: var(--font-base); color: var(--color-gray-800);
 }
-/* Vertical tab on the right edge, centered on the screen */
-.sh-devnotes__toggle {
-  list-style: none; cursor: pointer; display: flex; align-items: center; gap: 8px;
-  padding: 16px 10px; writing-mode: vertical-rl; transform: rotate(180deg);
-  background: var(--color-gray-800); color: var(--color-white);
-  font-size: 12px; font-weight: 700; letter-spacing: .6px; text-transform: uppercase;
-}
-.sh-devnotes__toggle::-webkit-details-marker { display: none; }
-.sh-devnotes__toggle::after { content: "+"; font-size: 16px; line-height: 1; }
-.sh-devnotes[open] .sh-devnotes__toggle::after { content: "–"; }
-.sh-devnotes__toggle:focus-visible { outline: 2px solid var(--color-blue-focus); outline-offset: 2px; }
 
-/* Panel opens to the LEFT of the tab, also centered vertically */
+/* Tab: vertical button, 16px from the right edge, centered on the screen */
+.sh-devnotes__toggle {
+  position: relative; z-index: 1; list-style: none; cursor: pointer;
+  display: block; padding: 20px 12px; border-radius: 6px;
+  background: var(--devnotes-blue); color: var(--color-white);
+  box-shadow: 0 2px 8px rgba(0, 48, 135, .35);
+  font-size: 14px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+  transition: transform .5s cubic-bezier(.2, .8, .2, 1), box-shadow .2s;
+  animation: sh-devnotes-in 1.6s cubic-bezier(.3, .7, .4, 1) .4s backwards;
+}
+.sh-devnotes__toggle:hover { box-shadow: 0 4px 14px rgba(0, 48, 135, .45); }
+.sh-devnotes__toggle::-webkit-details-marker { display: none; }
+.sh-devnotes__toggle:focus-visible { outline: 2px solid var(--color-blue-focus); outline-offset: 2px; }
+.sh-devnotes__label { display: block; writing-mode: vertical-rl; transform: rotate(180deg); }
+
+/* Slow bounce in from the right */
+@keyframes sh-devnotes-in {
+  0%   { transform: translateX(calc(100% + 32px)); }
+  55%  { transform: translateX(-14px); }
+  75%  { transform: translateX(5px); }
+  90%  { transform: translateX(-2px); }
+  100% { transform: translateX(0); }
+}
+
+/* Open: panel sits 16px from the right; the tab slides out from behind it to its left */
+.sh-devnotes[open] .sh-devnotes__toggle {
+  transform: translateX(calc(-1 * (var(--devnotes-panel-w) + var(--devnotes-gap))));
+}
 .sh-devnotes__panel {
-  position: absolute; right: 100%; top: 50%; transform: translateY(-50%);
-  width: min(420px, calc(100vw - 48px)); max-height: calc(100vh - 48px); overflow-y: auto;
+  position: absolute; z-index: 2; right: 0; top: 50%; transform: translateY(-50%);
+  width: var(--devnotes-panel-w); max-height: calc(100vh - 32px); overflow-y: auto;
   box-sizing: border-box; padding: 20px 16px 24px; background: var(--color-white);
-  border: 1px solid var(--color-brown-200); box-shadow: -4px 4px 16px rgba(0,0,0,.12);
+  border: 1px solid var(--color-brown-200); border-radius: 6px;
+  box-shadow: -4px 4px 16px rgba(0,0,0,.12);
   font-size: 13px; line-height: 20px;
+  animation: sh-devnotes-panel .25s ease-out;
+}
+@keyframes sh-devnotes-panel { from { opacity: 0; } to { opacity: 1; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .sh-devnotes__toggle, .sh-devnotes__panel { animation: none; transition: none; }
 }
 .sh-devnotes__panel h2 { margin: 0 0 4px; font-size: 16px; font-weight: 700; }
 .sh-devnotes__panel h3 {
@@ -1445,10 +1471,10 @@ body { margin: 0; background: var(--color-white); font-family: var(--font-base);
 
 <!-- Prototype annotation (project section: sections/dev-notes/) -->
 <details class="sh-root sh-devnotes" id="sh-devnotes">
-  <summary class="sh-devnotes__toggle">Dev notes · ACCOUNT-182</summary>
+  <summary class="sh-devnotes__toggle"><span class="sh-devnotes__label">Dev notes</span></summary>
   <div class="sh-devnotes__panel" role="region" aria-label="Developer notes">
     <h2>Medium scope: what changes</h2>
-    <p class="sh-devnotes__meta">Values from the live page (measured at 1440 and 375). Class names differ in production; apply to the matching elements. Production lays out the form row with flexbox, so keep flex rather than copying this prototype's grid.</p>
+    <p class="sh-devnotes__meta">Ticket ACCOUNT-182. Values from the live page (measured at 1440 and 375). Class names differ in production; apply to the matching elements. Production lays out the form row with flexbox, so keep flex rather than copying this prototype's grid.</p>
 
     <h3>Both scopes</h3>
     <ul class="sh-devnotes__list">
