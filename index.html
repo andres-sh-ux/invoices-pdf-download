@@ -982,16 +982,14 @@ body { margin: 0; background: var(--color-white); font-family: var(--font-base);
 .sh-devnotes__toggle::-webkit-details-marker { display: none; }
 .sh-devnotes__toggle:focus-visible { outline: 2px solid var(--color-blue-focus); outline-offset: 2px; }
 .sh-devnotes__label { display: block; writing-mode: vertical-rl; transform: rotate(180deg); }
-/* + / – state icon above the label, drawn with two bars so it never rotates */
+/* Chevron above the label: points left when closed (opens), right when open (closes) */
 .sh-devnotes__toggle::before {
-  content: ""; display: block; width: 12px; height: 12px; margin: 0 auto 12px;
-  background:
-    linear-gradient(currentColor, currentColor) center / 12px 2px no-repeat,
-    linear-gradient(currentColor, currentColor) center / 2px 12px no-repeat;
+  content: ""; display: block; width: 8px; height: 8px; margin: 2px auto 14px;
+  border: solid currentColor; border-width: 0 0 2px 2px;
+  transform: translateX(2px) rotate(45deg);
+  transition: transform .3s ease;
 }
-.sh-devnotes[open] .sh-devnotes__toggle::before {
-  background: linear-gradient(currentColor, currentColor) center / 12px 2px no-repeat;
-}
+.sh-devnotes[open] .sh-devnotes__toggle::before { transform: translateX(-2px) rotate(-135deg); }
 
 /* Slow bounce in from the right */
 @keyframes sh-devnotes-in {
