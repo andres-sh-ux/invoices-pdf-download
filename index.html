@@ -953,6 +953,70 @@ body { margin: 0; background: var(--color-white); font-family: var(--font-base);
 
 
 </style>
+<style>/* sections/dev-notes/dev-notes.css */
+/* ==========================================================================
+   Section: dev-notes (project-only, prototype annotation — not part of the design)
+   Collapsible panel pinned to the right edge listing the CSS / copy changes
+   developers need for ACCOUNT-182. Built on <details>, so no JS.
+   Mobile-first · design breakpoints only (768).
+   ========================================================================== */
+.sh-devnotes {
+  position: fixed; z-index: 1100; right: 0; bottom: 16px;
+  font-family: var(--font-base); color: var(--color-gray-800);
+}
+.sh-devnotes__toggle {
+  list-style: none; cursor: pointer; display: flex; align-items: center; gap: 8px;
+  margin-left: auto; width: max-content; padding: 10px 16px;
+  background: var(--color-gray-800); color: var(--color-white);
+  font-size: 12px; font-weight: 700; letter-spacing: .6px; text-transform: uppercase;
+}
+.sh-devnotes__toggle::-webkit-details-marker { display: none; }
+.sh-devnotes__toggle::after { content: "+"; font-size: 16px; line-height: 1; }
+.sh-devnotes[open] .sh-devnotes__toggle::after { content: "–"; }
+.sh-devnotes__toggle:focus-visible { outline: 2px solid var(--color-blue-focus); outline-offset: 2px; }
+
+.sh-devnotes__panel {
+  width: 100vw; max-height: 70vh; overflow-y: auto; box-sizing: border-box;
+  padding: 20px 16px 24px; background: var(--color-white);
+  border-top: 1px solid var(--color-brown-200); box-shadow: 0 -4px 16px rgba(0,0,0,.12);
+  font-size: 13px; line-height: 20px;
+}
+.sh-devnotes__panel h2 { margin: 0 0 4px; font-size: 16px; font-weight: 700; }
+.sh-devnotes__panel h3 {
+  margin: 20px 0 8px; font-size: 11px; font-weight: 700; letter-spacing: .6px;
+  text-transform: uppercase; color: var(--color-gray-700);
+}
+.sh-devnotes__panel p { margin: 0 0 8px; }
+.sh-devnotes__meta { color: var(--color-gray-700); }
+.sh-devnotes__list { margin: 0; padding: 0; list-style: none; }
+.sh-devnotes__item { padding: 10px 0; border-top: 1px solid var(--color-gray-300); }
+.sh-devnotes__item b { display: block; }
+.sh-devnotes__tag {
+  display: inline-block; margin-left: 6px; padding: 0 6px; font-size: 10px; font-weight: 700;
+  letter-spacing: .4px; text-transform: uppercase; border: 1px solid currentColor; vertical-align: 1px;
+}
+.sh-devnotes__tag--css { color: var(--color-blue-700); }
+.sh-devnotes__tag--copy { color: var(--color-brown-550); }
+.sh-devnotes__tag--markup { color: var(--color-orange-500); }
+.sh-devnotes__item code, .sh-devnotes__code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 12px;
+}
+.sh-devnotes__code {
+  display: block; margin-top: 6px; padding: 8px 10px; white-space: pre; overflow-x: auto;
+  background: var(--color-gray-50); border-left: 2px solid var(--color-gray-300);
+}
+.sh-devnotes__was { color: var(--color-gray-700); }
+
+@media (min-width: 768px) {
+  .sh-devnotes { top: 120px; bottom: auto; }
+  .sh-devnotes__panel {
+    width: 420px; max-height: calc(100vh - 160px);
+    border: 1px solid var(--color-brown-200); border-right: 0;
+    box-shadow: -4px 4px 16px rgba(0,0,0,.12);
+  }
+}
+
+</style>
 <style>/* sections/invoice-download/invoice-download.css */
 /* ==========================================================================
    Section: invoice-download (project-only)
@@ -1384,6 +1448,51 @@ body { margin: 0; background: var(--color-white); font-family: var(--font-base);
   </div>
 </div>
 </main>
+
+<!-- Prototype annotation (project section: sections/dev-notes/) -->
+<details class="sh-root sh-devnotes" id="sh-devnotes">
+  <summary class="sh-devnotes__toggle">Dev notes · ACCOUNT-182</summary>
+  <div class="sh-devnotes__panel" role="region" aria-label="Developer notes">
+    <h2>Medium scope: what changes</h2>
+    <p class="sh-devnotes__meta">Values from the live page (measured at 1440 and 375). Class names differ in production; apply to the matching elements. Production lays out the form row with flexbox, so keep flex rather than copying this prototype's grid.</p>
+
+    <h3>Both scopes</h3>
+    <ul class="sh-devnotes__list">
+      <li class="sh-devnotes__item"><b>File Type dropdown<span class="sh-devnotes__tag sh-devnotes__tag--markup">Markup</span></b>Remove (hide only; keep the Excel export in place).</li>
+      <li class="sh-devnotes__item"><b>Download button<span class="sh-devnotes__tag sh-devnotes__tag--copy">Copy</span><span class="sh-devnotes__tag sh-devnotes__tag--css">CSS</span></b>Label "Download PDF", icon hidden. Height, color, 13px Bold and inset shadow unchanged.
+        <code class="sh-devnotes__code">text-transform: uppercase;
+letter-spacing: 0.6px;
+padding: 0 32px;        /* was 10px 50px */
+.icon { display: none; } /* or remove it */</code></li>
+    </ul>
+
+    <h3>Medium scope only</h3>
+    <ul class="sh-devnotes__list">
+      <li class="sh-devnotes__item"><b>Section title<span class="sh-devnotes__tag sh-devnotes__tag--copy">Copy</span></b>"Download Invoices by Date Range" <span class="sh-devnotes__was">(was "Download Multiple Invoices by Date Range")</span>. Size unchanged: 24px, 20px/22px below 768.</li>
+      <li class="sh-devnotes__item"><b>Form box<span class="sh-devnotes__tag sh-devnotes__tag--css">CSS</span></b>
+        <code class="sh-devnotes__code">border: 0;              /* was 1px solid #C8C4C0 */
+padding: 0;             /* &lt;768, was 20px */
+@media (min-width: 768px) {
+  padding: 16px 0;
+}</code></li>
+      <li class="sh-devnotes__item"><b>Date Range + Invoice Type fields<span class="sh-devnotes__tag sh-devnotes__tag--css">CSS</span></b>Max 280px each; they shrink between 768 and 1199 so the row fits. Button keeps its width. Gap stays 15px.
+        <code class="sh-devnotes__code">@media (min-width: 768px) {
+  flex: 1 1 280px;
+  max-width: 280px;
+}</code></li>
+      <li class="sh-devnotes__item"><b>Email preferences line<span class="sh-devnotes__tag sh-devnotes__tag--css">CSS</span></b>
+        <code class="sh-devnotes__code">padding: 12px 0 30px;   /* was 12px 0 */
+margin: 15px 0;         /* &lt;768, unchanged */
+@media (min-width: 768px) {
+  margin-top: 0;
+}</code></li>
+    </ul>
+
+    <h3>Unchanged</h3>
+    <p>Page shell (nav, header, 16px mobile gutter), labels, 40px fields and borders, select text, 50px above "Download Invoices by Order", mobile stacking, and all download behavior.</p>
+    <p class="sh-devnotes__meta">This prototype shows layout only: the date picker, dropdown and download button aren't functional.</p>
+  </div>
+</details>
 
 <footer class="sh-root sh-footer">
 
